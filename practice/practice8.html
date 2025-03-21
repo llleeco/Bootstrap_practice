@@ -36,14 +36,40 @@
   <body>
     <div id="app" class="container mt-4">
       <h3>8번 고급 문제: 지하철 퀴즈 - 랜덤 5문제 & 점수판</h3>
-      <h5 class="mt-4" style="font-weight: bold;">Q1. 첫 차는 새벽 3시에 운행을 시작합니다.</h5>
-      <button type="button" class="btn btn-success me-2 mt-2">예</button>
-      <button type="button" class="btn btn-danger mt-2">아니오</button>
-      <div class="alert alert-success mt-3">
+      <div v-if="!finish" >
+      <h5 class="mt-4" style="font-weight: bold;">Q{{currentQuestion+1}}. {{ randomQuestions.length ? randomQuestions[currentQuestion].question : '로딩 중...' }}</h5>
+      <button type="button" class="btn btn-success me-2 mt-2" @click="clickYes">예</button>
+      <button type="button" class="btn btn-danger mt-2" @click="clickNo">아니오</button>
+      <div v-if="Correct" class="alert alert-success mt-3">
         <i class="fa-solid fa-award"></i> 
-        <i class="fa-solid fa-face-frown"></i> 
         정답입니다!
+      </div>
+      <div v-if="Incorrect" class="alert alert-danger mt-3">
+        <i class="fa-solid fa-face-frown"></i> 
+        오답입니다!
+      </div>
+     
     </div>
+      <div v-if="finish" class="card mt-4" style=" box-shadow: 5px 5px 5px lightgray;">
+        <div class="card-body">
+          <h5 class="card-title">🏆 퀴즈 완료!</h5>
+          <p class="card-text">당신의 점수는 {{score}}/{{randomQuestions.length}}점 입니다!</p>
+          <ul class="list-group mt-4">
+        
+            <li v-for="(question,index) in randomQuestions" class="list-group-item d-flex justify-content-between">
+                <div>
+                Q{{index+1}}. {{question.question}} 
+            </div>
+              <div>
+                <i v-if="myAnswer[index]=='정답'" class="fa-solid fa-award" style="color:green"></i> 
+                <i v-if="myAnswer[index]=='오답'" class="fa-solid fa-face-frown"  style="color:red"></i> 
+                {{myAnswer[index]}}
+               </span>
+            </li>
+        </div>
+          </ul>
+        </div>
+      </div>
     </div>
     <script src="https://unpkg.com/vue"></script>
     <script>
@@ -51,42 +77,73 @@
         name: 'App',
         data() {
           return {
-            quiestions:[
+            questions:[
                 {question:'급행 열차는 일반 열차보다 빠를까요?', answer:'네'},
                 {question:'지하철 내에서는 물 이외의 음식 섭취가 금지되어 있습니다.', answer:'네'},
                 {question:'첫 차는 새벽 3시에 운행을 시작합니다.', answer:'아니오'},
                 {question:'모든 열차는 출발역과 종착역이 같습니다.', answer:'아니오'},
+                {question:'지하철 1호선 노선의 색깔은 초록색입니다.', answer:'아니오'},
+                {question:'지하철 2호선은 순환 열차입니다.', answer:'네'},
+                {question:'시각 장애인 안내견은 지하철 승차가 가능한 동물입니다.', answer:'네'},
                 {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
-                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
-                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
-                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
-                
-
-            ]
+                {question:'지하철 4호선 노선의 색깔은 보라색입니다.', answer:'아니오'},
+            ],
+            randomQuestions:[],
+            currentQuestion:0,
+            myAnswer:[],
+            Correct:false,
+            Incorrect:false,
+            score:0,
+            finish:false
           };
         },
         methods:{
-            countDown(){
-                this.check = true;
-                let second = 5;
-                const timerId = setInterval(()=>{
-                    this.message=`출발까지 ${second}초`;
-                    second--;
-                   
-                    if(second<0){
-                        this.check=false;
-                        if(Math.random() > 0.3){
-                            this.result="열차가 출발했습니다!🚆";
-                            this.fontColor='green';
-                        }
-                        else{
-                            this.result="열차지연! 5분 기다려주세요.⌛";
-                              this.fontColor='red';
-                        }
-                        this.message='열차 출발 버튼';
-                        clearInterval(timerId);
-                    }
-                },1000);
+            clickYes(){
+                if(this.randomQuestions[this.currentQuestion].answer =='네'){
+                    this.myAnswer.push('정답');
+                    this.Correct = true;
+                    this.Incorrect=false;
+                    this.score++;
+                }else{
+                    this.myAnswer.push('오답');
+                    this.Incorrect=true;
+                    this.Correct=false;
+                }
+                this.nextQuestion();   
+            },
+            clickNo(){
+                if(this.randomQuestions[this.currentQuestion].answer =='아니오'){
+                    this.myAnswer.push('정답');
+                    this.Correct = true;
+                    this.Incorrect=false;
+                    this.score++;
+                }else{
+                    this.myAnswer.push('오답');
+                    this.Incorrect=true;
+                    this.Correct=false;
+                }    
+                this.nextQuestion();     
+            },
+            nextQuestion(){            
+                setTimeout(()=>{
+                    if(this.currentQuestion<4){
+                        this.currentQuestion++;
+                    }else{
+                        this.finish = true;
+                    }      
+                 },1000);                         
+            }
+        },
+        mounted() {
+            const randomNum=[];
+            while(randomNum.length<5){
+                rand = Math.floor(Math.random() * 8);
+                if(randomNum.includes(rand)){
+                    continue;
+                }else{
+                    randomNum.push(rand);
+                    this.randomQuestions.push(this.questions[rand]);
+                }
             }
         }
       }).mount('#app');
