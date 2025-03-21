@@ -37,10 +37,14 @@
     <div id="app" class="container mt-4">
       <h3>4번 문제: 열차 출발 카운트다운 + 결과 메세지</h3>
       <div class="mt-3 d-flex">
-        <button type="button" class="btn btn-primary" @click="countDown">
-          {{message}}
+        <button type="button" class="btn btn-primary" @click="countDown" :disabled="check">
+            <i v-if="check" class="fas fa-spinner fa-spin"></i> {{message}}
         </button>
       </div>
+      <div class="mt-3" :style="{ color: fontColor, fontWeight: 'bold' }">
+        {{result}}
+      </div>
+
     </div>
     <script src="https://unpkg.com/vue"></script>
     <script>
@@ -48,33 +52,36 @@
         name: 'App',
         data() {
           return {
-            exits: [
-              { exitnum: 1, facility: '대형서점' },
-              { exitnum: 2, facility: '커피숍' },
-              { exitnum: 3, facility: '쇼핑몰' },
-              { exitnum: 4, facility: '영화관' },
-            ],
-
-            disable: '',
             message: '열차 출발 버튼',
+            check:false,
+            result:'',
+            fontColor:'',
           };
         },
-        methods: {
-          countDown() {
-            let countdown = 5;
-
-            const interval = setInterval(() => {
-              this.message = `출발까지 ${countdown}초...`;
-              console.log(countdown); // 현재 카운트값 출력
-              countdown--; // 카운트다운 값 1초마다 감소
-
-              if (countdown < 0) {
-                clearInterval(interval);
-                console.log('카운트다운 종료!');
-              }
-            }, 1000); // 1초마다 실행
-          },
-        },
+        methods:{
+            countDown(){
+                this.check = true;
+                let second = 5;
+                const timerId = setInterval(()=>{
+                    this.message=`출발까지 ${second}초`;
+                    second--;
+                   
+                    if(second<0){
+                        this.check=false;
+                        if(Math.random() > 0.3){
+                            this.result="열차가 출발했습니다!🚆";
+                            this.fontColor='green';
+                        }
+                        else{
+                            this.result="열차지연! 5분 기다려주세요.⌛";
+                              this.fontColor='red';
+                        }
+                        this.message='열차 출발 버튼';
+                        clearInterval(timerId);
+                    }
+                },1000);
+            }
+        }
       }).mount('#app');
     </script>
   </body>

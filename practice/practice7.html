@@ -60,6 +60,12 @@
           </div>
         </div>
       </div>
+      <div class="card mt-4" style=" box-shadow: 5px 5px 5px lightgray;">
+        <div class="card-body">
+          <h5 class="card-title">⭐ 오늘의 추천 실천 항목: {{recommandEtiquette.etiquette}}</h5>
+          <p class="card-text">점수: {{recommandEtiquette.score}} - 꼭 실천해 보세요!</p>
+        </div>
+      </div>
     </div>
     <script src="https://unpkg.com/vue"></script>
     <script>
@@ -75,7 +81,17 @@
             ],
           };
         },
-        computed: {},
+        computed: {
+          recommandEtiquette(){
+            let max = this.etiquettes[0];
+            for(etiquette of this.etiquettes){
+              if(max.score<etiquette.score){
+                max = etiquette;
+              }
+            }
+            return max;
+          }
+        },
 
         methods: {
           getColor(score) {

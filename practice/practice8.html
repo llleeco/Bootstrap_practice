@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap 5</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-
+    SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    />
+    <!-- 스타일 마지막에 나의 css파일 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--나의 js파일 마지막에  -->
+    <style>
+      h3,
+      td {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container mt-4">
+      <h3>8번 고급 문제: 지하철 퀴즈 - 랜덤 5문제 & 점수판</h3>
+      <h5 class="mt-4" style="font-weight: bold;">Q1. 첫 차는 새벽 3시에 운행을 시작합니다.</h5>
+      <button type="button" class="btn btn-success me-2 mt-2">예</button>
+      <button type="button" class="btn btn-danger mt-2">아니오</button>
+      <div class="alert alert-success mt-3">
+        <i class="fa-solid fa-award"></i> 
+        <i class="fa-solid fa-face-frown"></i> 
+        정답입니다!
+    </div>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return {
+            quiestions:[
+                {question:'급행 열차는 일반 열차보다 빠를까요?', answer:'네'},
+                {question:'지하철 내에서는 물 이외의 음식 섭취가 금지되어 있습니다.', answer:'네'},
+                {question:'첫 차는 새벽 3시에 운행을 시작합니다.', answer:'아니오'},
+                {question:'모든 열차는 출발역과 종착역이 같습니다.', answer:'아니오'},
+                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
+                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
+                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
+                {question:'지하철 9호선은 급행과 일반 열차를 모두 운영합니다.', answer:'네'},
+                
+
+            ]
+          };
+        },
+        methods:{
+            countDown(){
+                this.check = true;
+                let second = 5;
+                const timerId = setInterval(()=>{
+                    this.message=`출발까지 ${second}초`;
+                    second--;
+                   
+                    if(second<0){
+                        this.check=false;
+                        if(Math.random() > 0.3){
+                            this.result="열차가 출발했습니다!🚆";
+                            this.fontColor='green';
+                        }
+                        else{
+                            this.result="열차지연! 5분 기다려주세요.⌛";
+                              this.fontColor='red';
+                        }
+                        this.message='열차 출발 버튼';
+                        clearInterval(timerId);
+                    }
+                },1000);
+            }
+        }
+      }).mount('#app');
+    </script>
+  </body>
+</html>
