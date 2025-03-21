@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap 5</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-
+    SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    />
+    <!-- 스타일 마지막에 나의 css파일 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--나의 js파일 마지막에  -->
+    <style>
+      .fontgreen {
+        color: green;
+      }
+      .fontred {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container mt-4">
+      <h3>3번 문제: 좌석 현황 표시 (랜덤 상태 갱신)</h3>
+      <div class="mt-3 d-flex">
+        <button type="button" class="btn btn-success" @click="reloadSeats">
+          <i class="fa-solid fa-rotate"></i>
+          좌석 현황 새로고침
+        </button>
+      </div>
+      <ul class="list-group mt-4">
+        <li v-for="seat in seats" class="list-group-item">
+          <i
+            v-if="seat.state2"
+            class="fa-solid fa-circle-xmark"
+            style="color: red"
+          ></i>
+          <i
+            v-if="!seat.state2"
+            class="fa-solid fa-circle-check"
+            style="color: green"
+          ></i>
+          {{seat.position}} -
+          <span :class="active">{{seat.state}}</span>
+        </li>
+      </ul>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return {
+            active: 'fontgreen',
+            seats: [
+              { position: '창가', state: '사용중', state2: true },
+              { position: '복도', state: '비어 있음', state2: false },
+              { position: '우대석', state: '사용중', state2: true },
+              { position: '출입구 옆', state: '사용중', state2: true },
+            ],
+            click: false,
+          };
+        },
+
+        methods: {
+          reloadSeats() {
+            for (seat of this.seats) {
+              let randomNumber = Math.floor(Math.random() * 2);
+              if (randomNumber == 0) {
+                seat.state = '비어있음';
+                seat.state2 = false;
+              } else {
+                seat.state = '사용중';
+                state2: true;
+              }
+            }
+          },
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>
